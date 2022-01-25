@@ -39,8 +39,6 @@ function Titulo(props) {
     const roteamento = useRouter();
     const disableButton = username.length <= 2 ? true : false;
 
-    console.log(disableButton);
-
     return (
       <>
         <Box
@@ -152,13 +150,15 @@ function Titulo(props) {
                 minHeight: '240px',
               }}
             >
-              <Image
-                styleSheet={{
-                  borderRadius: '50%',
-                  marginBottom: '16px',
-                }}
-                src={`https://github.com/${username}.png`}
-              />
+              { !disableButton &&
+                <Image
+                  styleSheet={{
+                    borderRadius: '50%',
+                    marginBottom: '16px',
+                  }}
+                  src={`https://github.com/${username}.png`}
+                />
+              }
               <Text
                 variant="body4"
                 styleSheet={{
@@ -168,7 +168,7 @@ function Titulo(props) {
                   borderRadius: '1000px'
                 }}
               >
-                {username}
+                {disableButton ? '' : username}
               </Text>
             </Box>
             {/* Photo Area */}
