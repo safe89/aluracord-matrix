@@ -70,7 +70,7 @@ function Titulo(props) {
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backgroundColor: appConfig.theme.colors.primary[50],
-            backgroundImage: 'url(https://wallpapercave.com/wp/7INjqUa.jpg)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1502899576159-f224dc2349fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTd8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80)',
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
           }}
         >
@@ -87,6 +87,7 @@ function Titulo(props) {
               borderRadius: '5px', padding: '32px', margin: '16px',
               boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
               backgroundColor: appConfig.theme.colors.neutrals[100],
+              opacity: "90%"
             }}
           >
             {/* Formulário */}
@@ -94,11 +95,11 @@ function Titulo(props) {
               as="form"
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
+                width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px'
               }}
             >
-              <Titulo tag="h2">Boas vindas de volta!</Titulo>
-              <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
+              <Titulo tag="h2">Welcome to The Jungle!</Titulo>
+              <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[500] }}>
                 {appConfig.name}
               </Text>
 
@@ -106,10 +107,10 @@ function Titulo(props) {
                 fullWidth
                 textFieldColors={{
                   neutral: {
-                    textColor: appConfig.theme.colors.neutrals[200],
-                    mainColor: appConfig.theme.colors.neutrals[700],
-                    mainColorHighlight: appConfig.theme.colors.primary[500],
-                    backgroundColor: appConfig.theme.colors.neutrals[800],
+                    textColor: appConfig.theme.colors.neutrals[100],
+                    mainColor: appConfig.theme.colors.neutrals[900],
+                    mainColorHighlight: appConfig.theme.colors.primary[100],
+                    backgroundColor: appConfig.theme.colors.neutrals[900],
                   },
                 }}
               />
@@ -118,10 +119,10 @@ function Titulo(props) {
                 label='Entrar'
                 fullWidth
                 buttonColors={{
-                  contrastColor: appConfig.theme.colors.neutrals["000"],
-                  mainColor: appConfig.theme.colors.primary[900],
-                  mainColorLight: appConfig.theme.colors.primary[400],
-                  mainColorStrong: appConfig.theme.colors.primary[600],
+                  contrastColor: appConfig.theme.colors.neutrals["100"],
+                  mainColor: appConfig.theme.colors.primary[999],
+                  mainColorLight: appConfig.theme.colors.primary[998],
+                  mainColorStrong: appConfig.theme.colors.primary[997],
                 }}
               />
             </Box>
@@ -136,9 +137,9 @@ function Titulo(props) {
                 alignItems: 'center',
                 maxWidth: '200px',
                 padding: '16px',
-                backgroundColor: appConfig.theme.colors.neutrals[800],
+                backgroundColor: appConfig.theme.colors.neutrals[900],
                 border: '1px solid',
-                borderColor: appConfig.theme.colors.neutrals[999],
+                borderColor: appConfig.theme.colors.neutrals["999"],
                 borderRadius: '10px',
                 flex: 1,
                 minHeight: '240px',
