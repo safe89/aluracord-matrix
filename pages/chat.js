@@ -1,6 +1,11 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
+import { createClient } from '@supabase/supabase-js';
 import React from 'react';
 import appConfig from '../config.json';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMxNjIzOCwiZXhwIjoxOTU4ODkyMjM4fQ.hvblVhJsoJVmH3ffPGvZzSQYUmu8Pl0JnqKgit9c3Vw';
+const SUPABASE_URL = 'https://rdoqawnnsozpxmjkwltp.supabase.co';
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
     /*
@@ -18,18 +23,34 @@ export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
+     // Tudo o que não faz parte do processo normal mas é sim um extra. Ele fica à escuta de quando a lista de mensagens muda, e só ai ele faz a chamada
+    React.useEffect(() => {
+        supabaseClient
+            .from('mensagens')
+            .select('*')
+            .then(({ data }) => {
+                console.log(data);
+                setListaDeMensagens(data)
+        });
+    }, []);
+
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
+            //id: listaDeMensagens.length + 1,
             de: 'sara',
             texto: novaMensagem
-        }
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-        ])
+        };
+
+        supabaseClient.from('mensagens').insert([mensagem]).then((data => {
+            console.log('O que vem de resposta: ', resp);
+            setListaDeMensagens([
+                data[0],
+                ...listaDeMensagens,
+            ])
+        }));
         setMensagem('');
     }
+
 
     return (
         <Box
@@ -49,8 +70,8 @@ export default function ChatPage() {
                     boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
                     borderRadius: '5px',
                     backgroundColor: appConfig.theme.colors.neutrals[700],
-                    height: '100%',
-                    maxWidth: '95%',
+                    height: '70%',
+                    maxWidth: '55%',
                     maxHeight: '95vh',
                     padding: '32px',
                 }}
@@ -145,6 +166,7 @@ function MessageList(props) {
                 flex: 1,
                 color: appConfig.theme.colors.neutrals["000"],
                 marginBottom: '16px',
+                overflow: 'hidden',
             }}
         >
             {props.mensagens.map((mensagem) => {
