@@ -2,24 +2,25 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import { createClient } from '@supabase/supabase-js';
 import React from 'react';
 import appConfig from '../config.json';
+import { useRouter } from 'next/router'
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzMxNjIzOCwiZXhwIjoxOTU4ODkyMjM4fQ.hvblVhJsoJVmH3ffPGvZzSQYUmu8Pl0JnqKgit9c3Vw';
 const SUPABASE_URL = 'https://rdoqawnnsozpxmjkwltp.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+function escutaMensagensEmTempoReal(adicionaMensagem) {
+    return supabaseClient
+        .from()
+        .on('INSERT', (respostaLive) => {
+            adicionaMensagem(respostaLive.new);
+        })
+        .subscribe();
+}
+
 export default function ChatPage() {
-    /*
-    // Utilizador
-    - Utilizador digita no campo textarea
-    - Aperta enter para enviar
-    - Tem que adicionar o texto na lista
-
-     // Dev
-     - [x] Campo
-     - [x] Usar o onChange que por suas vez vai usar o useState (inserir if para qd Enter ele limpar a variavel)
-     - [x] Lista de mensagens
-
-    */
+    const roteamento = useRouter();
+    const usuarioLogado = roteamento.query.username;
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
@@ -30,23 +31,34 @@ export default function ChatPage() {
             .select('*')
             .order('id', {ascending: false})
             .then(({ data }) => {
-                console.log(data);
-                setListaDeMensagens(data)
+                //console.log(data);
+                setListaDeMensagens(data);
+        });
+        escutaMensagensEmTempoReal((novaMensagem) => {
+            setListaDeMensagens((valorAtualDaLista) => {
+                return [
+                    novaMensagem,
+                    ...valorAtualDaLista,
+                ]
+            })
+            //handleNovaMensagem(novaMensagem);
         });
     }, []);
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
             //id: listaDeMensagens.length + 1,
-            de: 'sara',
+            de: usuarioLogado,
             texto: novaMensagem
         };
 
-        supabaseClient.from('mensagens').insert([mensagem]).then((data => {
-            setListaDeMensagens([
+        supabaseClient.from('mensagens')
+        .insert([mensagem])
+        .then((data => {
+            /* setListaDeMensagens([
                 data[0],
                 ...listaDeMensagens,
-            ])
+            ]) */
         }));
         setMensagem('');
     }
@@ -130,6 +142,12 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        {/* Callback */}
+                        <ButtonSendSticker
+                            onStickerClick={(sticker) => {
+                                console.log('[USANDO O COMPONENTE] Salvar o sticker!');
+                                handleNovaMensagem(':sticker: ' + sticker)
+                            }} />
                     </Box>
                 </Box>
             </Box>
@@ -160,7 +178,6 @@ function MessageList(props) {
         <Box
             tag="ul"
             styleSheet={{
-                overflow: 'scroll',
                 display: 'flex',
                 flexDirection: 'column-reverse',
                 flex: 1,
@@ -212,7 +229,13 @@ function MessageList(props) {
                             {(new Date().toLocaleDateString())}
                         </Text>
                     </Box>
-                    {mensagem.texto}
+                    {mensagem.texto.startsWith(':sticker:')
+                    ? (
+                         <Image src={mensagem.texto.replace(':sticker:')}/>
+                    ) : (
+                             mensagem.texto
+                    )}
+                    {/* {mensagem.texto} */}
                 </Text>
                 );
             })}

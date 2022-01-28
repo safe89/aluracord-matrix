@@ -71,7 +71,7 @@ function Titulo(props) {
               onSubmit={function (event) {
                 event.preventDefault();
                 console.log('Form submetido!')
-                roteamento.push('/chat')
+                roteamento.push(`/chat?username=${username}`)
                 // A forma abaixo é a convencional de JS e não REact
                 //window.location.href = '/chat'
               }}
